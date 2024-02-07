@@ -1,73 +1,37 @@
 package main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-
-import Main.Articulo;
-import Main.Menu;
+import java.util.Scanner;
+import modelo.entidad.Coche;
+import modelo.negocio.GestorCoche;
 
 public class Main {
 
+	static Scanner sc = new Scanner(System.in);
+	static GestorCoche gc = new GestorCoche();
 	
-public static final String fichero = "articulos.dat";
-private static ArrayList<Articulo> listaArticulos;
-
 	public static void main(String[] args) {
-		
-		File file = new File(fichero);
-		
-		listaArticulos = new ArrayList<Articulo>();
-		
-		System.out.println("Bienvenido a programa de gestión de stock");
-		System.out.println("");
-		if (file.exists()) {
-				System.out.println("Existe un fichero con información");
-			
-			try(FileInputStream fis = new FileInputStream("articulos.dat");
-					ObjectInputStream ois = new ObjectInputStream(fis);) {
 				
-				listaArticulos = (ArrayList<Articulo>)ois.readObject();
-				
-				System.out.println(""
-						+ "Fichero cargado");
-				
-			} catch (FileNotFoundException e) {
-				System.out.println("no hay archivo");
-				System.out.println("");
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-		}	
-		else
-			System.out.println("NO existen ficheros");
-		
 		int opcion = 0;
 		do {
 			opcion= Menu.pintarMenu();
 			switch (opcion) {
 				case 1:
-					anadirCoche();
+					altaCoche();
 				break;
 				case 2:
-					borrar();
+				//	borrar();
 				break;
 				case 3:
-					consultar();
+					//consultar();
 				break;
 				case 4:
-					modificar();
+				//	modificar();
 				break;	
 				case 5:
-					listar();
+				//	listar();
 				break;
 				case 6:
-					gestionPasageros;
+				//	gestionPasageros;
 				break;
 				case 7:
 				//	salir;
@@ -76,5 +40,30 @@ private static ArrayList<Articulo> listaArticulos;
 		}while (opcion!=6);
 		
 		System.out.println("Fin del programa");
+	}
+	
+	public static Coche altaCoche() {
+		System.out.println("Introduzca los datos del usuario (marca/modelo/fechaFafricacion/kilometros)");
+		String marca = sc.next();
+		String modelo = sc.next();
+		int fechaFabricacion = sc.nextInt();
+		int kilometros = sc.nextInt();
+		
+		Coche c = new Coche();
+		c.setMarca(marca);
+		c.setModelo(modelo);
+		c.setFechaFabricacion(fechaFabricacion);
+		c.setKilometros(kilometros);
+		
+		int alta = gc.alta(c);
+		if(alta == 0) {
+			System.out.println("Coche dada de alta");
+		}else if(alta == 1) {
+			System.out.println("Error de conexión con la BBDD");
+		}else if(alta == 2){
+			System.out.println("El usuario tiene menos de tres carateres");
+		}
+		
+		return c;
 	}
 }
