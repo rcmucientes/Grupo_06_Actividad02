@@ -19,27 +19,20 @@ public class DaoFlotaCochesMySql implements DaoFlotaCoches {
 	
 private Connection conexion;
 private Properties properties;
-private String url,usuario, password;
 	
 	public boolean abrirConexion(){
-		/* esto hay que meterlo en un "fichero"
-		String url = "jdbc:mysql://localhost:3306/bbdd";
-		String usuario = "root";
-		String password = "";
-		*/
+		
 		try {
-			// Cargamos el properties
-			// tiene que estar dentro de una ruta de classpath
 			properties = new Properties();
 			properties.load(new FileInputStream(new File("config.properties")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			conexion = DriverManager.getConnection(properties.getProperty("url"),properties.getProperty("usuario"),
-					properties.getProperty("password"));
-		} catch (SQLException e) {
-			
+			conexion = DriverManager.getConnection(properties.getProperty("url"),
+												   properties.getProperty("usuario"),
+												   properties.getProperty("password"));
+		} catch (SQLException e) {	
 			e.printStackTrace();
 			return false;
 		}
@@ -66,7 +59,6 @@ private String url,usuario, password;
 		String query = "insert into coches (MARCA,MODELO,FABRICACION,KILOMETROS) "
 				+ " values(?,?,?,?)";
 		try {
-			//preparamos la query con valores parametrizables(?)
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setString(1, c.getMarca());
 			ps.setString(2, c.getModelo());
